@@ -39,8 +39,11 @@
         [self.toolbar setAutoresizingMask:(UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth)];
         [self addSubview:self.toolbar];
         
-        [self setSegmentedControl:[[UISegmentedControl alloc] initWithItems:@[ NSLocalizedStringFromTable(@"Previous", @"BSKeyboardControls", @"Previous button title."),
-                                                                               NSLocalizedStringFromTable(@"Next", @"BSKeyboardControls", @"Next button title.") ]]];
+        UIImage *backImage = [[UIImage imageNamed:@"backChevron"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+        UIImage *forwardImage = [[UIImage imageNamed:@"forwardChevron"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+        [self setSegmentedControl:[[UISegmentedControl alloc] initWithItems:@[backImage, forwardImage]] ];
+        
+        // [self setSegmentedControl:[[UISegmentedControl alloc] initWithItems:@[ NSLocalizedStringFromTable(@"Previous", @"BSKeyboardControls", @"Previous button title."), NSLocalizedStringFromTable(@"Next", @"BSKeyboardControls", @"Next button title.") ]]];
         [self.segmentedControl addTarget:self action:@selector(segmentedControlValueChanged:) forControlEvents:UIControlEventValueChanged];
         [self.segmentedControl setMomentary:YES];
         [self.segmentedControl setSegmentedControlStyle:UISegmentedControlStyleBar];
