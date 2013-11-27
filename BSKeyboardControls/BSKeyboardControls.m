@@ -35,7 +35,7 @@
     if (self = [super initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, 44.0f)])
     {
         [self setToolbar:[[UIToolbar alloc] initWithFrame:self.frame]];
-        [self.toolbar setBarStyle:UIBarStyleBlackTranslucent];
+        [self.toolbar setBarStyle:UIBarStyleDefault];
         [self.toolbar setAutoresizingMask:(UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth)];
         [self addSubview:self.toolbar];
         
@@ -43,10 +43,10 @@
         UIImage *forwardImage = [[UIImage imageNamed:@"forwardChevron"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
         [self setSegmentedControl:[[UISegmentedControl alloc] initWithItems:@[backImage, forwardImage]] ];
         
-        // [self setSegmentedControl:[[UISegmentedControl alloc] initWithItems:@[ NSLocalizedStringFromTable(@"Previous", @"BSKeyboardControls", @"Previous button title."), NSLocalizedStringFromTable(@"Next", @"BSKeyboardControls", @"Next button title.") ]]];
         [self.segmentedControl addTarget:self action:@selector(segmentedControlValueChanged:) forControlEvents:UIControlEventValueChanged];
         [self.segmentedControl setMomentary:YES];
         [self.segmentedControl setSegmentedControlStyle:UISegmentedControlStyleBar];
+        [self.segmentedControl setTintColor:[UIColor clearColor]];
         [self.segmentedControl setEnabled:NO forSegmentAtIndex:BSKeyboardControlsDirectionPrevious];
         [self.segmentedControl setEnabled:NO forSegmentAtIndex:BSKeyboardControlsDirectionNext];
         [self setSegmentedControlItem:[[UIBarButtonItem alloc] initWithCustomView:self.segmentedControl]];
@@ -55,6 +55,11 @@
                                                              style:UIBarButtonItemStyleDone
                                                             target:self
                                                             action:@selector(doneButtonPressed:)]];
+
+        [self.doneButton setTitleTextAttributes:@{
+                                                   UITextAttributeTextColor: [UIColor blackColor]
+                                                 }
+                                       forState: UIControlStateNormal];
         
         [self setVisibleControls:(BSKeyboardControlPreviousNext | BSKeyboardControlDone)];
         
@@ -282,7 +287,10 @@
     
     if (self.visibleControls & BSKeyboardControlDone)
     {
-        [items addObject:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil]];
+        UIBarButtonItem *fixedSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+        fixedSpace.width = 170;
+        
+        [items addObject:fixedSpace];
         [items addObject:self.doneButton];
     }
     
