@@ -39,14 +39,20 @@
         [self.toolbar setAutoresizingMask:(UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleWidth)];
         [self addSubview:self.toolbar];
         
-        UIImage *backImage = [[UIImage imageNamed:@"backChevron"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-        UIImage *forwardImage = [[UIImage imageNamed:@"forwardChevron"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+        UIImage *backImage = [UIImage imageNamed:@"backChevron"];
+        UIImage *forwardImage = [UIImage imageNamed:@"forwardChevron"];
+        
+        if ([backImage respondsToSelector:@selector(imageWithRenderingMode:)]
+            && [forwardImage respondsToSelector:@selector(imageWithRenderingMode:)]) {
+            backImage = [backImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+            forwardImage = [forwardImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+        }
+        
         [self setSegmentedControl:[[UISegmentedControl alloc] initWithItems:@[backImage, forwardImage]] ];
         
         [self.segmentedControl addTarget:self action:@selector(segmentedControlValueChanged:) forControlEvents:UIControlEventValueChanged];
         [self.segmentedControl setMomentary:YES];
         [self.segmentedControl setSegmentedControlStyle:UISegmentedControlStyleBar];
-        [self.segmentedControl setTintColor:[UIColor clearColor]];
         [self.segmentedControl setEnabled:NO forSegmentAtIndex:BSKeyboardControlsDirectionPrevious];
         [self.segmentedControl setEnabled:NO forSegmentAtIndex:BSKeyboardControlsDirectionNext];
         [self setSegmentedControlItem:[[UIBarButtonItem alloc] initWithCustomView:self.segmentedControl]];
@@ -55,11 +61,11 @@
                                                              style:UIBarButtonItemStyleDone
                                                             target:self
                                                             action:@selector(doneButtonPressed:)]];
-
-        [self.doneButton setTitleTextAttributes:@{
-                                                   UITextAttributeTextColor: [UIColor blackColor]
-                                                 }
-                                       forState: UIControlStateNormal];
+        
+        if (([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)) {
+            [self.segmentedControl setTintColor:[UIColor clearColor]];
+            [self.doneButton setTitleTextAttributes:@{UITextAttributeTextColor: [UIColor blackColor]} forState: UIControlStateNormal];
+        }
         
         [self setVisibleControls:(BSKeyboardControlPreviousNext | BSKeyboardControlDone)];
         
