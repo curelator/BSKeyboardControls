@@ -101,14 +101,14 @@
         if (!activeField || [self.fields containsObject:activeField])
         {
             _activeField = activeField;
-        
+            
             if (activeField)
             {
                 if (![activeField isFirstResponder])
                 {
                     [activeField becomeFirstResponder];
                 }
-            
+                
                 [self updateSegmentedControlEnabledStates];
             }
         }
@@ -210,7 +210,7 @@
     if (visibleControls != _visibleControls)
     {
         _visibleControls = visibleControls;
-
+        
         [self.toolbar setItems:[self toolbarItems]];
     }
 }
@@ -285,16 +285,22 @@
 
 - (NSArray *)toolbarItems
 {
+    CGFloat fixedSpaceWith = 170;
     NSMutableArray *items = [NSMutableArray arrayWithCapacity:3];
     if (self.visibleControls & BSKeyboardControlPreviousNext)
     {
         [items addObject:self.segmentedControlItem];
     }
+    else {
+        UIView *view = [self.segmentedControlItem valueForKey:@"view"];
+        CGFloat width = view? [view frame].size.width : (CGFloat)0.0;
+        fixedSpaceWith += width + 10;
+    }
     
     if (self.visibleControls & BSKeyboardControlDone)
     {
         UIBarButtonItem *fixedSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-        fixedSpace.width = 170;
+        fixedSpace.width = fixedSpaceWith;
         
         [items addObject:fixedSpace];
         [items addObject:self.doneButton];
